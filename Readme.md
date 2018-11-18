@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Вероника Хацаюк](https://up.htmlacademy.ru/javascript/16/user/223446).
-* Наставник: `Неизвестно`.
+* Наставник: Михаил Кононеко.
 
 ---
 
