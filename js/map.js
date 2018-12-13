@@ -159,6 +159,7 @@ var renderPin = function (object) {
 
   pinImg.setAttribute('src', object.author.avatar);
   pinImg.setAttribute('alt', object.offer.title);
+
   return pinElement;
 };
 
@@ -171,26 +172,35 @@ objects.map(function (obj) {
   var card = renderCard(obj);
   pinFragment.appendChild(pin);
   cardFragment.appendChild(card);
+
   pin.addEventListener('click', function () {
     card.classList.toggle('hidden');
 
-    if (card.classList.contains('hidden') === false) {
-      pin.classList.add('map__pin--active');
-      card.classList.add('active');
-    } else {
-      card.classList.remove('active');
-      card.classList.add('inactive');
-      pin.classList.remove('map__pin--active');
+    var currentlyActiveCard = document.querySelector('.visible');
+    var currentlyactivePin = document.querySelector('.map__pin--active');
+
+    if (currentlyactivePin) {
+      currentlyactivePin.classList.remove('map__pin--active');
     }
 
-    var cardClose = card.querySelector('.popup__close');
-    cardClose.addEventListener('click', function () {
-      card.classList.add('hidden');
-      pin.classList.remove('map__pin--active');
-      card.classList.remove('active');
-      card.classList.add('inactive');
-    });
+    if (currentlyActiveCard) {
+      currentlyActiveCard.classList.remove('visible');
+    }
+
+    card.classList.add('visible');
+    pin.classList.add('map__pin--active');
+
   });
+
+  var cardClose = card.querySelector('.popup__close');
+  cardClose.addEventListener('click', function () {
+    card.classList.add('hidden');
+    card.classList.remove('visible');
+    pin.classList.remove('map__pin--active');
+
+
+  });
+
 });
 
 similarListElement.appendChild(pinFragment);

@@ -1014,6 +1014,10 @@ fieldset {
 
   border-radius: 5px;
   background-color: #ffffff;
+  display: none;
+}
+.map__card.visible {
+  display: block;
 }
 
 .popup__avatar {
