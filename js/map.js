@@ -73,7 +73,6 @@ function generateObjects() {
   }
   return result;
 }
-generateObjects();
 
 var activeState = document.querySelector('.map');
 activeState.classList.remove('map--faded');
@@ -177,10 +176,10 @@ objects.map(function (obj) {
     card.classList.toggle('hidden');
 
     var currentlyActiveCard = document.querySelector('.visible');
-    var currentlyactivePin = document.querySelector('.map__pin--active');
+    var currentlyActivePin = document.querySelector('.map__pin--active');
 
-    if (currentlyactivePin) {
-      currentlyactivePin.classList.remove('map__pin--active');
+    if (currentlyActivePin) {
+      currentlyActivePin.classList.remove('map__pin--active');
     }
 
     if (currentlyActiveCard) {
