@@ -272,6 +272,7 @@ var getActiveState = function () {
   Array.prototype.slice.call(formFieldsNodeList).map(function (item) {
     item.removeAttribute('disabled');
   });
+  document.querySelector('#address').setAttribute('disabled', 'disabled');
 
   var coordsOfMainPin = {
     x: parseInt(mainPin.style.left, 10) - (parseInt(mainImg.width, 10) / 2),
