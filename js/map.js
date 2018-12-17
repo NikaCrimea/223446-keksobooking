@@ -1,4 +1,7 @@
 'use strict';
+
+var ESC_KEYCODE = 27;
+
 function generateObjects() {
 
   var getRandomNumber = function (min, max) {
@@ -74,11 +77,7 @@ function generateObjects() {
   return result;
 }
 
-var activeState = document.querySelector('.map');
-activeState.classList.remove('map--faded');
-
-
-var similarListElement = activeState.querySelector('.map__pins');
+var similarListElement = document.querySelector('.map__pins');
 var similarPinTemplate = document.getElementById('pin').content.querySelector('.map__pin');
 
 var objects = generateObjects();
@@ -166,42 +165,98 @@ var pinFragment = document.createDocumentFragment();
 var cardFragment = document.createDocumentFragment();
 
 
-objects.map(function (obj) {
-  var pin = renderPin(obj);
-  var card = renderCard(obj);
-  pinFragment.appendChild(pin);
-  cardFragment.appendChild(card);
+var showPinAndCard = function () {
+  objects.map(function (obj) {
+    var pin = renderPin(obj);
+    var card = renderCard(obj);
+    pinFragment.appendChild(pin);
+    cardFragment.appendChild(card);
+    var cardClose = card.querySelector('.popup__close');
 
-  pin.addEventListener('click', function () {
-    card.classList.toggle('hidden');
+    var openCard = function () {
+      var currentlyActiveCard = document.querySelector('.visible');
+      var currentlyActivePin = document.querySelector('.map__pin--active');
 
-    var currentlyActiveCard = document.querySelector('.visible');
-    var currentlyActivePin = document.querySelector('.map__pin--active');
+      if (currentlyActivePin) {
+        currentlyActivePin.classList.remove('map__pin--active');
+      }
 
-    if (currentlyActivePin) {
-      currentlyActivePin.classList.remove('map__pin--active');
-    }
+      if (currentlyActiveCard) {
+        currentlyActiveCard.classList.remove('visible');
+      }
 
-    if (currentlyActiveCard) {
-      currentlyActiveCard.classList.remove('visible');
-    }
+      card.classList.add('visible');
+      pin.classList.add('map__pin--active');
 
-    card.classList.add('visible');
-    pin.classList.add('map__pin--active');
+      document.addEventListener('keydown', function (e) {
+        if (e.keyCode === ESC_KEYCODE) {
+          card.classList.remove('visible');
+          pin.classList.remove('map__pin--active');
+        }
+      }, {once: true});
+    };
 
+    var closeCard = function () {
+      card.classList.remove('visible');
+      pin.classList.remove('map__pin--active');
+    };
+
+    pin.addEventListener('click', function () {
+      openCard();
+    });
+
+    cardClose.addEventListener('click', function () {
+      closeCard();
+    });
   });
 
-  var cardClose = card.querySelector('.popup__close');
-  cardClose.addEventListener('click', function () {
-    card.classList.add('hidden');
-    card.classList.remove('visible');
-    pin.classList.remove('map__pin--active');
+  similarListElement.appendChild(pinFragment);
+  similarCardElement.insertBefore(cardFragment, document.querySelector('.map__filters-container'));
+};
+/**
+ *
+ *
+ */
+var map = document.querySelector('.map');
+var mainPin = document.querySelector('.map__pin--main');
+var addressInput = document.querySelector('#address');
+var mainImg = mainPin.querySelector('img');
+var formFieldsNodeList = document.querySelectorAll('fieldset');
 
 
+var getInactiveState = function () {
+  map.classList.add('map--faded');
+
+  Array.prototype.slice.call(formFieldsNodeList).map(function (item) {
+    item.setAttribute('disabled', 'disabled');
   });
 
+  var coordsOfMainPin = {
+    x: parseInt(mainPin.style.left, 10) + (parseInt(mainImg.width, 10) / 2),
+    y: parseInt(mainPin.style.top, 10) - (parseInt(mainImg.height, 10) / 2)
+  };
+
+  addressInput.setAttribute('value', coordsOfMainPin.x + ', ' + coordsOfMainPin.y);
+
+};
+getInactiveState();
+
+var getActiveState = function () {
+  map.classList.remove('map--faded');
+  showPinAndCard();
+  Array.prototype.slice.call(formFieldsNodeList).map(function (item) {
+    item.removeAttribute('disabled');
+  });
+  document.querySelector('#address').setAttribute('disabled', 'disabled');
+
+  var coordsOfMainPin = {
+    x: parseInt(mainPin.style.left, 10) - (parseInt(mainImg.width, 10) / 2),
+    y: parseInt(mainPin.style.top, 10) + parseInt(mainImg.height, 10)
+  };
+  addressInput.setAttribute('value', coordsOfMainPin.x + ', ' + coordsOfMainPin.y);
+};
+
+mainPin.addEventListener('mouseup', function () {
+  getActiveState();
 });
-
-similarListElement.appendChild(pinFragment);
-similarCardElement.insertBefore(cardFragment, document.querySelector('.map__filters-container'));
 
