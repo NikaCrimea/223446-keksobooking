@@ -1,7 +1,6 @@
 'use strict';
 
 var ESC_KEYCODE = 27;
-var ENTER_KEYCODE = 13;
 
 function generateObjects() {
 
@@ -174,14 +173,7 @@ var showPinAndCard = function () {
     cardFragment.appendChild(card);
     var cardClose = card.querySelector('.popup__close');
 
-    var onCardEscPress = function (e) {
-      if (e.keyCode === ESC_KEYCODE) {
-        closeCard();
-      }
-    };
-
     var openCard = function () {
-      card.classList.toggle('hidden');
       var currentlyActiveCard = document.querySelector('.visible');
       var currentlyActivePin = document.querySelector('.map__pin--active');
 
@@ -198,42 +190,24 @@ var showPinAndCard = function () {
 
       document.addEventListener('keydown', function (e) {
         if (e.keyCode === ESC_KEYCODE) {
-          card.classList.add('hidden');
           card.classList.remove('visible');
           pin.classList.remove('map__pin--active');
         }
-      });
+      }, {once: true});
     };
 
     var closeCard = function () {
-      card.classList.add('hidden');
       card.classList.remove('visible');
       pin.classList.remove('map__pin--active');
-      document.removeEventListener('keydown', onCardEscPress);
     };
-
 
     pin.addEventListener('click', function () {
       openCard();
     });
 
-    pin.addEventListener('keydown', function (e) {
-      if (e.keyCode === ENTER_KEYCODE) {
-        openCard();
-      }
-    });
-
     cardClose.addEventListener('click', function () {
       closeCard();
     });
-
-
-    cardClose.addEventListener('keydown', function (e) {
-      if (e.keyCode === ENTER_KEYCODE) {
-        closeCard();
-      }
-    });
-
   });
 
   similarListElement.appendChild(pinFragment);
@@ -261,6 +235,7 @@ var getInactiveState = function () {
     x: parseInt(mainPin.style.left, 10) + (parseInt(mainImg.width, 10) / 2),
     y: parseInt(mainPin.style.top, 10) - (parseInt(mainImg.height, 10) / 2)
   };
+
   addressInput.setAttribute('value', coordsOfMainPin.x + ', ' + coordsOfMainPin.y);
 
 };
