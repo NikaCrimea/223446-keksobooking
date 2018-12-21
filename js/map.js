@@ -222,6 +222,7 @@ var mainPin = document.querySelector('.map__pin--main');
 var addressInput = document.querySelector('#address');
 var mainImg = mainPin.querySelector('img');
 var formFieldsNodeList = document.querySelectorAll('fieldset');
+var form = document.querySelector('.ad-form');
 
 
 var getInactiveState = function () {
@@ -243,6 +244,8 @@ getInactiveState();
 
 var getActiveState = function () {
   map.classList.remove('map--faded');
+  form.classList.remove('ad-form--disabled');
+
   showPinAndCard();
   Array.prototype.slice.call(formFieldsNodeList).map(function (item) {
     item.removeAttribute('disabled');
@@ -256,12 +259,66 @@ var getActiveState = function () {
   addressInput.setAttribute('value', coordsOfMainPin.x + ', ' + coordsOfMainPin.y);
 };
 
-mainPin.addEventListener('mouseup', function () {
-  getActiveState();
+/**
+ *Перемещение метки по карте
+ *
+ */
+mainPin.addEventListener('mousedown', function (e) {
+  e.preventDefault();
+
+  var maxXPosition = document.querySelector('.map__overlay').offsetWidth;
+  var pinWidth = document.querySelector('.map__pin img').offsetWidth;
+
+  var startCoords = {
+    x: e.clientX,
+    y: e.clientY
+  };
+
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    if (startCoords.x >= maxXPosition) {
+      mainPin.style.left = maxXPosition - pinWidth + 'px';
+    } else if (startCoords.x <= 0) {
+      mainPin.style.left = 0 + 'px';
+    } else {
+      mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
+    }
+
+    if (startCoords.y >= 630) {
+      mainPin.style.top = 630 + 'px';
+    } else if (startCoords.y <= 130) {
+      mainPin.style.top = 130 + 'px';
+    } else {
+      mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
+    }
+
+  };
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+    getActiveState();
+
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
 });
 /**
  *
- *
+ *Валидация формы
  */
 var roomNumber = document.querySelector('#room_number');
 var capacity = document.querySelector('#capacity');
@@ -281,7 +338,7 @@ CustomValidation.prototype = {
       this.addInvalidity('не для гостей');
     }
     if (capacityValue > roomNumberValue) {
-      this.addInvalidity('недопустимое количесвто гостей');
+      this.addInvalidity('недопустимое количество гостей');
     }
     if (this.invalidities.length > 0) {
       return false;
@@ -310,7 +367,5 @@ selects.forEach(function (el) {
     validation.checkValidity(roomNumber, capacity);
     var validityMessage = validation.getInvalidities();
     roomNumber.setCustomValidity(validityMessage);
-
   });
 });
-
