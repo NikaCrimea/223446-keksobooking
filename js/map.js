@@ -68,7 +68,7 @@ var mainPin = document.querySelector('.map__pin--main');
 var addressInput = document.querySelector('#address');
 var mainImg = mainPin.querySelector('img');
 var formFieldsNodeList = document.querySelectorAll('fieldset');
-var form = document.querySelector('.ad-form');
+//var form = document.querySelector('.ad-form');
 
 
 var getInactiveState = function () {
@@ -160,4 +160,114 @@ mainPin.addEventListener('mousedown', function (e) {
 
   document.addEventListener('mousemove', onMouseMove);
   document.addEventListener('mouseup', onMouseUp);
+});
+/**
+ *
+ * Сообщение об ошибке
+ */
+var getErrorMessage = function (message) {
+  var main = document.querySelector('main');
+  var errorMessageTemplate = document.querySelector('#error').content;
+
+  var errorMessageElement = errorMessageTemplate.cloneNode(true);
+  errorMessageElement.querySelector('.error__message').textContent = message;
+
+  var errorMessageFragment = document.createDocumentFragment();
+
+  errorMessageFragment.appendChild(errorMessageElement);
+  main.appendChild(errorMessageFragment);
+};
+
+/**
+ *
+ * Сообщение об успешной отправке формы
+ */
+var getSuccessMessage = function () {
+  var main = document.querySelector('main');
+  var successMessageTemplate = document.querySelector('#success').content;
+
+  var successMessageElement = successMessageTemplate.cloneNode(true);
+
+  var successMessageFragment = document.createDocumentFragment();
+
+  successMessageFragment.appendChild(successMessageElement);
+  main.appendChild(successMessageFragment);
+};
+
+var onLoad = function (data) {
+  showPinAndCard()
+};
+var onError = function (message) {
+  getErrorMessage(message);
+};
+
+/**
+ *
+ * Отправка формы
+ */
+var submitButton = document.querySelector('.ad-form__submit');
+var form = document.querySelector('.ad-form');
+submitButton.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  var formData = new FormData();
+  var inputTitle = document.querySelector('#title');
+  var inputPrice = document.querySelector('#price');
+  var roomNumber = document.querySelector('#room_number');
+  console.log(roomNumber.value, inputPrice.value, inputTitle.value);
+  formData.append('room number', roomNumber.value);
+  formData.append('price', inputPrice.value);
+  formData.append('title', inputTitle.value);
+  console.log('данные', formData.values());
+
+  console.log('submit');
+
+  window.upload(formData, function () {
+    getSuccessMessage();
+    var successMessage = document.querySelector('.success');
+    var main = document.querySelector('main');
+    document.addEventListener('keydown', function () {
+
+      if (e.keyCode === ESC_KEYCODE) {
+        console.log('esc');
+        main.removeChild(successMessage);
+      }
+    }, {once: true});
+
+    successMessage.addEventListener('click', function () {
+      console.log('click');
+      main.removeChild(successMessage);
+    }, {once: true});
+    console.log(notice);
+
+
+  }, function () {
+    getErrorMessage();
+
+    var errorMessage = document.querySelector('.error');
+    var errorButton = document.querySelector('.error__button');
+    console.log(document.querySelector('main'));
+    console.log(errorMessage);
+
+    document.addEventListener('keydown', function () {
+      console.log('click');
+      if (e.keyCode === ESC_KEYCODE) {
+        console.log('esc');
+        errorMessage.remove();
+      }
+    });
+
+    errorMessage.addEventListener('click', function () {
+      console.log('click');
+      errorMessage.remove();
+
+    }, {once: true});
+
+    errorButton.addEventListener('click', function () {
+      console.log('button click');
+      errorMessage.remove();
+
+    }, {once: true});
+
+  });
 });

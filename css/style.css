@@ -1192,9 +1192,6 @@ fieldset {
 
 
 }
-.success .invisible {
-  display: none;
-}
 
 .success__message,
 .error__message {
