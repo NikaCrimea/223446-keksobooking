@@ -45,6 +45,5 @@
 
     xhr.open('POST', 'https://js.dump.academy/keksobooking');
     xhr.send(data);
-    console.log(xhr);
   };
 })();

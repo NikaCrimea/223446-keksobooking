@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+
   window.form = function () {
     var roomNumber = document.querySelector('#room_number');
     var capacity = document.querySelector('#capacity');
@@ -10,8 +11,6 @@
     var form = document.querySelector('.ad-form');
     var timein = document.querySelector('#timein');
     var timeout = document.querySelector('#timeout');
-    var submitButton = document.querySelector('.ad-form__submit');
-
 
     function CustomValidation() {
       this.invalidities = [];
@@ -27,20 +26,16 @@
         var roomNumberValue = Number(roomNumber.value);
         var capacityValue = Number(capacity.value);
 
-
-
-        console.log('Заголовок', titleInput.value);
         if (titleInput.value.length < 30) {
           this.addInvalidityOfTitle('Заголовок должен состоять минимум из 30 символов');
         } else if (titleInput.value.length > 100) {
           this.addInvalidityOfTitle('Максимальная длина заголовка 100 символов');
         }
 
-
         if (priceInput.validity.rangeOverflow) {
           this.addInvalidityOfHousing('Максимальная цена за ночь 1 000 000');
         }
-        console.log('вид жилья', typeOfHousing.value);
+
         if (typeOfHousing.value === 'bungalo' && priceInput.value < 0) {
           this.addInvalidityOfHousing('минимальная цена за ночь 0');
         } else if (typeOfHousing.value === 'flat' && priceInput.value < 1000) {
@@ -109,11 +104,6 @@
       evt.target.classList.add('dirty');
 
       form.reportValidity();
-      console.log(!validation.checkValidity(capacity));
-      if (!validation.checkValidity(capacity)) {
-        submitButton.setAttribute('disabled', 'disabled');
-      }
-      console.log(validityMessage);
     });
 
 
@@ -129,10 +119,6 @@
       evt.target.classList.add('dirty');
 
       form.reportValidity();
-      console.log(!validationOfHousing.checkValidity(priceInput));
-      if (!validationOfHousing.checkValidity(priceInput)) {
-        submitButton.setAttribute('disabled', 'disabled');
-      }
     });
 
 
@@ -148,12 +134,7 @@
 
       form.reportValidity();
 
-      if (!validationOftitle.checkValidity(titleInput)) {
-        submitButton.setAttribute('disabled', 'disabled');
-      }
     });
-
-
   };
 
 })();
