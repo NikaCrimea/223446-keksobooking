@@ -640,6 +640,17 @@ fieldset {
 .ad-form__element--time select:first-of-type {
   margin-right: 14px;
 }
+#title.dirty:invalid {
+  border: 1px #f00 solid
+}
+
+#price.dirty:invalid {
+  border: 1px #f00 solid
+}
+
+#capacity.dirty:invalid {
+  border: 1px #f00 solid
+}
 
 .features legend {
   padding-bottom: 5px;

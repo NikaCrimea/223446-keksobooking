@@ -7,12 +7,12 @@
       return randomNumber;
     };
     var getAvatars = function () {
-      var avatar = [];
+      var avatars = [];
       for (var i = 1; i < 9; i++) {
         var url = 'img/avatars/user' + '0' + i.toString(10) + '.png';
-        avatar.push(url);
+        avatars.push(url);
       }
-      return avatar;
+      return avatars;
     };
     var getRandomFeature = function (arr) {
       var facilities = [];
@@ -41,7 +41,7 @@
     var description = '';
     var photos = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 
-    var result = [];
+    var results = [];
 
     for (var i = 0; i < 8; i++) {
       var x = getRandomNumber(1, 585);
@@ -49,7 +49,7 @@
       var price = getRandomNumber(1000, 1000000);
       var rooms = getRandomNumber(1, 5);
       var guests = getRandomNumber(1, 10);
-      result.push({
+      results.push({
         author: {
           avatar: avatar.pop()
         },
@@ -72,6 +72,6 @@
         }
       });
     }
-    return result;
+    return results;
   };
 })();
