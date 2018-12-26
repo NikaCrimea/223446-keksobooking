@@ -31,9 +31,11 @@
         y: moveEvt.clientY
       };
 
-      if (startCoords.x >= maxXPosition) {
+      var x = e.offsetX === undefined ? e.clientX - e.target.getBoundingClientRect().x : e.offsetX;
+
+      if (startCoords.x - x - pinWidth >= maxXPosition) {
         mainPin.style.left = maxXPosition - pinWidth + 'px';
-      } else if (startCoords.x - pinWidth <= minXPosition) {
+      } else if (startCoords.x - x <= minXPosition) {
         mainPin.style.left = minXPosition - 2 * pinWidth + 'px';
       } else {
         mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
