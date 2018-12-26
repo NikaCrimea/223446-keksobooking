@@ -25,6 +25,7 @@
       checkValidity: function () {
         var roomNumberValue = Number(roomNumber.value);
         var capacityValue = Number(capacity.value);
+        var submitButton = document.querySelector('.ad-form__submit');
 
         if (titleInput.value.length < 30) {
           this.addInvalidityOfTitle('Заголовок должен состоять минимум из 30 символов');
@@ -48,9 +49,16 @@
 
         if (capacityValue === 0 && roomNumberValue !== 100) {
           this.addInvalidityOfRoom('не для гостей');
+          submitButton.disabled = true;
+        } else {
+          submitButton.disabled = false;
         }
+
         if (capacityValue > roomNumberValue) {
           this.addInvalidityOfRoom('недопустимое количество гостей');
+          submitButton.disabled = true;
+        } else {
+          submitButton.disabled = false;
         }
 
         if (this.invalidities.length > 0) {

@@ -31,12 +31,11 @@
         y: moveEvt.clientY
       };
 
-      var x = e.offsetX === undefined ? e.clientX - e.target.getBoundingClientRect().x : e.offsetX;
 
-      if (startCoords.x - x - pinWidth >= maxXPosition) {
+      if (startCoords.x - pinWidth <= minXPosition) {
+        mainPin.style.left = 0 + 'px';
+      } else if (startCoords.x - mapOverlay.getBoundingClientRect().left >= maxXPosition) {
         mainPin.style.left = maxXPosition - pinWidth + 'px';
-      } else if (startCoords.x - x <= minXPosition) {
-        mainPin.style.left = minXPosition - 2 * pinWidth + 'px';
       } else {
         mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
       }
