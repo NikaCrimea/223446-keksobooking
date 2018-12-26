@@ -38,7 +38,7 @@
     }
 
     var offerCheckinsAdnCheckoutElement = cardElement.querySelector('.popup__text--time');
-    if (!object.offer.checkins && !object.offer.checkout) {
+    if (!object.offer.checkins || !object.offer.checkout) {
       offerCheckinsAdnCheckoutElement.remove();
     } else {
       offerCheckinsAdnCheckoutElement.textContent = 'Заезд после ' + object.offer.checkins + ', выезд до ' + object.offer.checkout;

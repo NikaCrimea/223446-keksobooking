@@ -8,7 +8,9 @@
   mainPin.addEventListener('mousedown', function (e) {
     e.preventDefault();
 
-    var maxXPosition = document.querySelector('.map__overlay').offsetWidth;
+    var mapOverlay = document.querySelector('.map__overlay');
+    var maxXPosition = mapOverlay.getBoundingClientRect().width;
+    var minXPosition = mapOverlay.getBoundingClientRect().x;
     var pinWidth = document.querySelector('.map__pin img').offsetWidth;
 
     var startCoords = {
@@ -31,8 +33,8 @@
 
       if (startCoords.x >= maxXPosition) {
         mainPin.style.left = maxXPosition - pinWidth + 'px';
-      } else if (startCoords.x <= 0) {
-        mainPin.style.left = 0 + 'px';
+      } else if (startCoords.x - pinWidth <= minXPosition) {
+        mainPin.style.left = minXPosition - 2 * pinWidth + 'px';
       } else {
         mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
       }
